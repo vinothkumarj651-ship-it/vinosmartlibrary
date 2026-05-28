@@ -1,0 +1,1101 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Profile</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Segoe UI',sans-serif;
+        }
+
+        body{
+
+            min-height:100vh;
+
+            background:
+            linear-gradient(
+            rgba(0,0,0,0.65),
+            rgba(0,0,0,0.65)
+            ),
+            url('/static/images/bg.webp');
+
+            background-size:cover;
+            background-position:center;
+            background-attachment:fixed;
+
+            color:white;
+
+        }
+
+        .navbar{
+
+            width:100%;
+
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+
+            padding:18px 40px;
+
+            background:rgba(255,255,255,0.08);
+
+            backdrop-filter:blur(14px);
+
+            border-bottom:1px solid rgba(255,255,255,0.1);
+
+            position:sticky;
+            top:0;
+            z-index:100;
+
+        }
+
+        .logo-box{
+
+            display:flex;
+            align-items:center;
+
+        }
+
+        .logo{
+
+            width:65px;
+            height:65px;
+
+            border-radius:50%;
+
+            background:white;
+
+            padding:6px;
+
+            margin-right:15px;
+
+        }
+
+        .logo-text h1{
+
+            font-size:30px;
+
+            font-weight:700;
+
+            letter-spacing:1px;
+
+        }
+
+        .logo-text p{
+
+            color:#ddd;
+
+            font-size:14px;
+
+            margin-top:4px;
+
+        }
+
+        .nav-right{
+
+            display:flex;
+            gap:15px;
+
+        }
+
+        .view-btn,
+        .edit-btn,
+        .logout-btn{
+
+            text-decoration:none;
+
+            padding:12px 24px;
+
+            border-radius:12px;
+
+            font-weight:600;
+
+            transition:0.3s;
+
+            color:white;
+
+        }
+
+        .view-btn{
+
+            background:#2563eb;
+
+        }
+
+        .view-btn:hover{
+
+            background:#1d4ed8;
+
+        }
+
+        .edit-btn{
+
+            background:#f59e0b;
+
+        }
+
+        .edit-btn:hover{
+
+            background:#d97706;
+
+        }
+
+        .logout-btn{
+
+            background:#ef4444;
+
+        }
+
+        .logout-btn:hover{
+
+            background:#dc2626;
+
+        }
+
+        .container{
+
+            width:92%;
+            margin:auto;
+
+            padding-top:35px;
+            padding-bottom:40px;
+
+        }
+
+        .profile-header{
+
+            background:rgba(255,255,255,0.10);
+
+            backdrop-filter:blur(16px);
+
+            border-radius:30px;
+
+            padding:40px;
+
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+
+            border:1px solid rgba(255,255,255,0.12);
+
+            box-shadow:0 10px 30px rgba(0,0,0,0.35);
+
+        }
+
+        .profile-left{
+
+            display:flex;
+            align-items:center;
+
+        }
+
+        .profile-image{
+
+            width:150px;
+            height:150px;
+
+            border-radius:50%;
+
+            object-fit:cover;
+
+            background:white;
+
+            padding:5px;
+
+            margin-right:30px;
+
+            border:4px solid rgba(255,255,255,0.2);
+
+        }
+
+        .profile-details h1{
+
+            font-size:50px;
+
+            margin-bottom:20px;
+
+        }
+
+        .detail-grid{
+
+            display:grid;
+
+            grid-template-columns:1fr 1fr;
+
+            gap:15px;
+
+        }
+
+        .detail-box{
+
+            background:rgba(255,255,255,0.08);
+
+            padding:14px 18px;
+
+            border-radius:14px;
+
+            font-size:17px;
+
+        }
+
+        .stats-grid{
+
+            margin-top:35px;
+
+            display:grid;
+
+            grid-template-columns:repeat(3,1fr);
+
+            gap:25px;
+
+        }
+
+        .stat-card{
+
+            background:rgba(255,255,255,0.10);
+
+            backdrop-filter:blur(16px);
+
+            border-radius:25px;
+
+            padding:35px;
+
+            text-align:center;
+
+            border:1px solid rgba(255,255,255,0.10);
+
+            transition:0.3s;
+
+        }
+
+        .stat-card:hover{
+
+            transform:translateY(-6px);
+
+        }
+
+        .stat-icon{
+
+            font-size:45px;
+
+            margin-bottom:15px;
+
+        }
+
+        .stat-card h1{
+
+            font-size:60px;
+
+            margin-bottom:10px;
+
+        }
+
+        .stat-card p{
+
+            font-size:20px;
+
+            color:#ddd;
+
+        }
+
+        .card{
+
+            margin-top:35px;
+
+            background:rgba(255,255,255,0.10);
+
+            backdrop-filter:blur(16px);
+
+            border-radius:28px;
+
+            padding:30px;
+
+            border:1px solid rgba(255,255,255,0.10);
+
+        }
+
+        .card-title{
+
+            font-size:34px;
+
+            margin-bottom:25px;
+
+        }
+
+        .request-header{
+
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+
+            margin-bottom:25px;
+
+        }
+
+        .request-count{
+
+            background:#2563eb;
+
+            padding:10px 18px;
+
+            border-radius:12px;
+
+            font-weight:600;
+
+            font-size:15px;
+
+        }
+
+        .request-grid{
+
+            display:grid;
+
+            grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+
+            gap:20px;
+
+        }
+
+        .request-box{
+
+            background:rgba(255,255,255,0.07);
+
+            border-radius:22px;
+
+            padding:22px;
+
+        }
+
+        .book-top{
+
+            display:flex;
+            align-items:center;
+
+            margin-bottom:18px;
+
+        }
+
+        .book-icon{
+
+            width:58px;
+            height:58px;
+
+            border-radius:16px;
+
+            background:rgba(37,99,235,0.18);
+
+            display:flex;
+            justify-content:center;
+            align-items:center;
+
+            font-size:28px;
+
+            margin-right:15px;
+
+        }
+
+        .book-top h3{
+
+            font-size:20px;
+
+            margin-bottom:5px;
+
+        }
+
+        .book-top p{
+
+            color:#d1d5db;
+
+            font-size:14px;
+
+        }
+
+        .request-time{
+
+            background:rgba(255,255,255,0.06);
+
+            padding:14px;
+
+            border-radius:12px;
+
+            font-size:15px;
+
+            margin-bottom:18px;
+
+        }
+
+        .status-area{
+
+            text-align:right;
+
+        }
+
+        .table-box{
+
+            overflow-x:auto;
+
+        }
+
+        table{
+
+            width:100%;
+
+            border-collapse:collapse;
+
+            overflow:hidden;
+
+            border-radius:18px;
+
+        }
+
+        table th{
+
+            background:#2563eb;
+
+            padding:18px;
+
+            font-size:18px;
+
+        }
+
+        table td{
+
+            background:rgba(255,255,255,0.06);
+
+            padding:18px;
+
+            text-align:center;
+
+            border-bottom:1px solid rgba(255,255,255,0.08);
+
+            font-size:16px;
+
+        }
+
+        .pending{
+
+            color:#facc15;
+            font-weight:700;
+
+        }
+
+        .approved{
+
+            color:#22c55e;
+            font-weight:700;
+
+        }
+
+        .rejected{
+
+            color:#ef4444;
+            font-weight:700;
+
+        }
+
+        .returned{
+
+            color:#22c55e;
+            font-weight:700;
+
+        }
+
+        .not-returned{
+
+            color:#f97316;
+            font-weight:700;
+
+        }
+
+        .empty{
+
+            text-align:center;
+
+            color:#ddd;
+
+            padding:25px;
+
+            font-size:18px;
+
+        }
+
+        @media(max-width:1000px){
+
+            .stats-grid{
+
+                grid-template-columns:1fr;
+
+            }
+
+        }
+
+        @media(max-width:850px){
+
+            .navbar{
+
+                flex-direction:column;
+                gap:15px;
+
+            }
+
+            .profile-header{
+
+                flex-direction:column;
+                text-align:center;
+
+            }
+
+            .profile-left{
+
+                flex-direction:column;
+
+            }
+
+            .profile-image{
+
+                margin-right:0;
+                margin-bottom:25px;
+
+            }
+
+            .detail-grid{
+
+                grid-template-columns:1fr;
+
+            }
+
+            .profile-details h1{
+
+                font-size:36px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="navbar">
+
+        <div class="logo-box">
+
+            <img
+                src="/static/images/logo.png"
+                class="logo"
+            >
+
+            <div class="logo-text">
+
+                <h1>SMART LIBRARY</h1>
+
+                <p>Anna University Regional Campus Madurai</p>
+
+            </div>
+
+        </div>
+
+        <div class="nav-right">
+
+            <a href="/view-books/" class="view-btn">
+
+                📚 View Books
+
+            </a>
+
+            <a href="/edit-profile/" class="edit-btn">
+
+                ✏ Edit Profile
+
+            </a>
+
+            <a href="/logout/" class="logout-btn">
+
+                Logout
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="container">
+
+        <div class="profile-header">
+
+            <div class="profile-left">
+
+                {% if profile.student_image %}
+
+                    <img
+                        src="{{ profile.student_image.url }}"
+                        class="profile-image"
+                    >
+
+                {% else %}
+
+                    <img
+                        src="/static/images/logo.png"
+                        class="profile-image"
+                    >
+
+                {% endif %}
+
+                <div class="profile-details">
+
+                    <h1>
+
+                        {{ profile.user.username }}
+
+                    </h1>
+
+                    <div class="detail-grid">
+
+                        <div class="detail-box">
+
+                            🎓 Department :
+                            {{ profile.department }}
+
+                        </div>
+
+                        <div class="detail-box">
+
+                            📘 Year :
+                            {{ profile.year }}
+
+                        </div>
+
+                        <div class="detail-box">
+
+                            🆔 Reg No :
+                            {{ profile.reg_no }}
+
+                        </div>
+
+                        <div class="detail-box">
+
+                            📞 Phone :
+                            {{ profile.phone }}
+
+                        </div>
+
+                        <div class="detail-box">
+
+                            📧 Email :
+                            {{ profile.user.email }}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+
+                    📚
+
+                </div>
+
+                <h1>
+
+                    {{ issued_books.count }}
+
+                </h1>
+
+                <p>
+
+                    Total Borrowed Books
+
+                </p>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+
+                    📖
+
+                </div>
+
+                <h1>
+
+                    {{ active_borrowed }}
+
+                </h1>
+
+                <p>
+
+                    Active Borrowed Books
+
+                </p>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+
+                    🏛️
+
+                </div>
+
+                <h1>
+
+                    {{ total_books }}
+
+                </h1>
+
+                <p>
+
+                    Library Books
+
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- BOOK REQUEST STATUS -->
+
+        <div class="card">
+
+            <div class="request-header">
+
+                <h2 class="card-title">
+
+                    📩 Book Request Status
+
+                </h2>
+
+                <div class="request-count">
+
+                    {{ requests.count }} Requests
+
+                </div>
+
+            </div>
+
+            {% if requests %}
+
+            <div class="request-grid">
+
+                {% for req in requests %}
+
+                <div class="request-box">
+
+                    <div class="book-top">
+
+                        <div class="book-icon">
+
+                            📘
+
+                        </div>
+
+                        <div>
+
+                            <h3>
+
+                                {{ req.book.title }}
+
+                            </h3>
+
+                            <p>
+
+                                Requested On
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="request-time">
+
+                        {{ req.requested_at|date:"d M Y - h:i A" }}
+
+                    </div>
+
+                    <div class="status-area">
+
+                        {% if req.status == "Pending" %}
+
+                            <span class="pending">
+
+                                ⏳ Pending
+
+                            </span>
+
+                        {% elif req.status == "Approved" %}
+
+                            <span class="approved">
+
+                                ✅ Approved
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="rejected">
+
+                                ❌ Rejected
+
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <div class="empty">
+
+                No Requests Found
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+        <!-- BORROWED BOOK STATUS -->
+
+        <div class="card">
+
+            <h2 class="card-title">
+
+                📚 Borrowed Book Status
+
+            </h2>
+
+            {% if issued_books %}
+
+            <div class="table-box">
+
+                <table>
+
+                    <tr>
+
+                        <th>Book Name</th>
+
+                        <th>Author</th>
+
+                        <th>Issued Date & Time</th>
+
+                        <th>Returned Date & Time</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                    {% for issue in issued_books %}
+
+                    <tr>
+
+                        <td>
+
+                            {{ issue.book.title }}
+
+                        </td>
+
+                        <td>
+
+                            {{ issue.book.author }}
+
+                        </td>
+
+                        <td>
+
+                            {{ issue.issued_at|date:"d M Y - h:i A" }}
+
+                        </td>
+
+                        <td>
+
+                            {% if issue.returned_at %}
+
+                                {{ issue.returned_at|date:"d M Y - h:i A" }}
+
+                            {% else %}
+
+                                Not Returned
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            {% if issue.returned %}
+
+                                <span class="returned">
+
+                                    Returned
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="not-returned">
+
+                                    Borrowed
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="empty">
+
+                No Borrowed Books
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+        <!-- DUE STATUS -->
+
+        <div class="card">
+
+            <h2 class="card-title">
+
+                ⚠️ Due Status
+
+            </h2>
+
+            {% if due_books %}
+
+            <div class="table-box">
+
+                <table>
+
+                    <tr>
+
+                        <th>Book Name</th>
+
+                        <th>Author</th>
+
+                        <th>Due Generated Date</th>
+
+                        <th>Return Deadline</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                    {% for issue in due_books %}
+
+                    <tr>
+
+                        <td>
+
+                            {{ issue.book.title }}
+
+                        </td>
+
+                        <td>
+
+                            {{ issue.book.author }}
+
+                        </td>
+
+                        <td>
+
+                            {{ issue.due_generated_at|date:"d M Y - h:i A" }}
+
+                        </td>
+
+                        <td>
+
+                            {{ issue.due_return_date|date:"d M Y - h:i A" }}
+
+                        </td>
+
+                        <td>
+
+                            {% if issue.returned %}
+
+                                <span class="returned">
+
+                                    ✅ Returned
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="rejected">
+
+                                    ⚠️ Return Within 2 Days Otherwise Fine Will Generate
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="empty">
+
+                No Due Generated
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

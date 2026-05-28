@@ -1,0 +1,749 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Segoe UI',sans-serif;
+        }
+
+        body{
+
+            min-height:100vh;
+
+            background:
+            linear-gradient(
+            rgba(0,0,0,0.60),
+            rgba(0,0,0,0.60)
+            ),
+            url('/static/images/bg.webp');
+
+            background-size:cover;
+            background-position:center;
+            background-attachment:fixed;
+
+            color:white;
+
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar{
+
+            width:100%;
+
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+
+            padding:18px 40px;
+
+            background:rgba(255,255,255,0.08);
+
+            backdrop-filter:blur(14px);
+
+            border-bottom:1px solid rgba(255,255,255,0.10);
+
+        }
+
+        .logo-box{
+
+            display:flex;
+            align-items:center;
+
+        }
+
+        .logo{
+
+            width:60px;
+            height:60px;
+
+            border-radius:50%;
+
+            background:white;
+
+            padding:5px;
+
+            margin-right:15px;
+
+        }
+
+        .logo-text h1{
+
+            font-size:30px;
+
+            font-weight:700;
+
+        }
+
+        .logo-text p{
+
+            color:#ddd;
+
+            font-size:14px;
+
+            margin-top:4px;
+
+        }
+
+        .logout-btn{
+
+            background:#ef4444;
+
+            color:white;
+
+            text-decoration:none;
+
+            padding:12px 24px;
+
+            border-radius:12px;
+
+            font-weight:600;
+
+            transition:0.3s;
+
+        }
+
+        .logout-btn:hover{
+
+            background:#dc2626;
+
+        }
+
+        /* ================= CONTAINER ================= */
+
+        .container{
+
+            width:92%;
+
+            margin:auto;
+
+            padding-top:30px;
+            padding-bottom:40px;
+
+        }
+
+        /* ================= HERO ================= */
+
+        .hero{
+
+            background:rgba(255,255,255,0.10);
+
+            backdrop-filter:blur(14px);
+
+            border-radius:30px;
+
+            padding:45px;
+
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+
+            border:1px solid rgba(255,255,255,0.10);
+
+            box-shadow:0 8px 25px rgba(0,0,0,0.30);
+
+        }
+
+        .hero-left h1{
+
+            font-size:65px;
+
+            line-height:80px;
+
+            margin-bottom:18px;
+
+        }
+
+        .hero-left p{
+
+            width:75%;
+
+            color:#ddd;
+
+            font-size:20px;
+
+            line-height:34px;
+
+        }
+
+        .hero-logo{
+
+            width:220px;
+
+            object-fit:contain;
+
+            filter:drop-shadow(0 0 12px rgba(255,255,255,0.25));
+
+        }
+
+        /* ================= TOP CARDS ================= */
+
+        .dashboard-grid{
+
+            margin-top:30px;
+
+            display:grid;
+
+            grid-template-columns:repeat(4,1fr);
+
+            gap:22px;
+
+        }
+
+        .card{
+
+            background:rgba(255,255,255,0.10);
+
+            backdrop-filter:blur(14px);
+
+            border-radius:25px;
+
+            padding:30px;
+
+            border:1px solid rgba(255,255,255,0.10);
+
+            transition:0.3s;
+
+            box-shadow:0 8px 25px rgba(0,0,0,0.25);
+
+        }
+
+        .card:hover{
+
+            transform:translateY(-6px);
+
+        }
+
+        .card .icon{
+
+            font-size:45px;
+
+            margin-bottom:18px;
+
+        }
+
+        .card h2{
+
+            font-size:28px;
+
+            margin-bottom:15px;
+
+        }
+
+        .card p{
+
+            color:#ddd;
+
+            line-height:30px;
+
+            font-size:16px;
+
+        }
+
+        .card a{
+
+            display:inline-block;
+
+            margin-top:22px;
+
+            text-decoration:none;
+
+            background:#2563eb;
+
+            color:white;
+
+            padding:11px 22px;
+
+            border-radius:10px;
+
+            font-weight:600;
+
+            transition:0.3s;
+
+        }
+
+        .card a:hover{
+
+            background:#1d4ed8;
+
+        }
+
+        /* ================= QUICK SECTION ================= */
+
+        .quick-section{
+
+            margin-top:35px;
+
+            background:rgba(255,255,255,0.10);
+
+            backdrop-filter:blur(14px);
+
+            border-radius:30px;
+
+            padding:35px;
+
+            border:1px solid rgba(255,255,255,0.10);
+
+            box-shadow:0 8px 25px rgba(0,0,0,0.25);
+
+        }
+
+        .quick-title{
+
+            font-size:40px;
+
+            margin-bottom:28px;
+
+        }
+
+        .quick-grid{
+
+            display:grid;
+
+            grid-template-columns:repeat(3,1fr);
+
+            gap:22px;
+
+        }
+
+        .quick-card{
+
+            background:rgba(255,255,255,0.08);
+
+            border-radius:24px;
+
+            padding:35px;
+
+            text-align:center;
+
+            border:1px solid rgba(255,255,255,0.08);
+
+            transition:0.3s;
+
+        }
+
+        .quick-card:hover{
+
+            transform:translateY(-5px);
+
+        }
+
+        .quick-card .icon{
+
+            font-size:55px;
+
+            margin-bottom:18px;
+
+        }
+
+        .quick-card h2{
+
+            font-size:30px;
+
+            margin-bottom:16px;
+
+        }
+
+        .quick-card p{
+
+            color:#ddd;
+
+            line-height:30px;
+
+            font-size:16px;
+
+            margin-bottom:22px;
+
+        }
+
+        .quick-card a{
+
+            text-decoration:none;
+
+            background:#2563eb;
+
+            color:white;
+
+            padding:12px 24px;
+
+            border-radius:10px;
+
+            font-weight:600;
+
+            display:inline-block;
+
+            transition:0.3s;
+
+        }
+
+        .quick-card a:hover{
+
+            background:#1d4ed8;
+
+        }
+
+        /* ================= FOOTER ================= */
+
+        .footer{
+
+            text-align:center;
+
+            margin-top:35px;
+
+            color:#ddd;
+
+            font-size:17px;
+
+        }
+
+        /* ================= MOBILE ================= */
+
+        @media(max-width:1200px){
+
+            .dashboard-grid{
+
+                grid-template-columns:repeat(2,1fr);
+
+            }
+
+            .quick-grid{
+
+                grid-template-columns:1fr;
+
+            }
+
+        }
+
+        @media(max-width:850px){
+
+            .hero{
+
+                flex-direction:column;
+
+                text-align:center;
+
+            }
+
+            .hero-left p{
+
+                width:100%;
+
+            }
+
+            .hero-logo{
+
+                width:180px;
+
+                margin-top:25px;
+
+            }
+
+            .dashboard-grid{
+
+                grid-template-columns:1fr;
+
+            }
+
+            .hero-left h1{
+
+                font-size:45px;
+
+                line-height:60px;
+
+            }
+
+            .navbar{
+
+                flex-direction:column;
+
+                gap:15px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+
+    <div class="navbar">
+
+        <div class="logo-box">
+
+            <img
+                src="/static/images/logo.png"
+                class="logo"
+            >
+
+            <div class="logo-text">
+
+                <h1>SMART LIBRARY</h1>
+
+                <p>Anna University Regional Campus Madurai</p>
+
+            </div>
+
+        </div>
+
+        <a href="/logout/" class="logout-btn">
+
+            Logout
+
+        </a>
+
+    </div>
+
+    <!-- ================= MAIN ================= -->
+
+    <div class="container">
+
+        <!-- HERO -->
+
+        <div class="hero">
+
+            <div class="hero-left">
+
+                <h1>
+
+                    ADMIN
+                    <br>
+                    DASHBOARD
+
+                </h1>
+
+                <p>
+
+                    Manage books, students, issued books,
+                    due generation and complete library operations
+                    efficiently using Smart Library System.
+
+                </p>
+
+            </div>
+
+            <div class="hero-right">
+
+                <img
+                    src="/static/images/logo.png"
+                    class="hero-logo"
+                >
+
+            </div>
+
+        </div>
+
+        <!-- TOP CARDS -->
+
+        <div class="dashboard-grid">
+
+            <!-- ADD BOOK -->
+
+            <div class="card">
+
+                <div class="icon">📚</div>
+
+                <h2>Add Books</h2>
+
+                <p>
+
+                    Add new books into the library database
+                    with quantity and location details.
+
+                </p>
+
+                <a href="/add-book/">
+
+                    Open
+
+                </a>
+
+            </div>
+
+            <!-- ADMIN VIEW BOOKS -->
+
+            <div class="card">
+
+                <div class="icon">📖</div>
+
+                <h2>Manage Books</h2>
+
+                <p>
+
+                    View all books and edit
+                    title, author, section, row,
+                    column and quantity.
+
+                </p>
+
+                <a href="/admin-view-books/">
+
+                    Open
+
+                </a>
+
+            </div>
+
+            <!-- STUDENTS -->
+
+            <div class="card">
+
+                <div class="icon">🎓</div>
+
+                <h2>Manage Students</h2>
+
+                <p>
+
+                    Manage student details department-wise
+                    and monitor student records.
+
+                </p>
+
+                <a href="/manage-students/">
+
+                    Open
+
+                </a>
+
+            </div>
+
+            <!-- ACTIVE BORROW -->
+
+            <div class="card">
+
+                <div class="icon">📚</div>
+
+                <h2>Issued Books</h2>
+
+                <p>
+
+                    Monitor currently borrowed books
+                    and return active borrowed books.
+
+                </p>
+
+                <a href="/issued-books/">
+
+                    Open
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- QUICK ACTIONS -->
+
+        <div class="quick-section">
+
+            <h1 class="quick-title">
+
+                ⚡ Quick Actions
+
+            </h1>
+
+            <div class="quick-grid">
+
+                <!-- REQUEST -->
+
+                <div class="quick-card">
+
+                    <div class="icon">📩</div>
+
+                    <h2>Student Book Request</h2>
+
+                    <p>
+
+                        Monitor and approve
+                        book requests sent by students.
+
+                    </p>
+
+                    <a href="/student-book-requests/">
+
+                        Open Requests
+
+                    </a>
+
+                </div>
+
+                <!-- DUE -->
+
+                <div class="quick-card">
+
+                    <div class="icon">⏰</div>
+
+                    <h2>Due Generation</h2>
+
+                    <p>
+
+                        Generate due alerts
+                        for students who didn't return books.
+
+                    </p>
+
+                    <a href="/due-generation/">
+
+                        Generate Due
+
+                    </a>
+
+                </div>
+
+                <!-- HISTORY -->
+
+                <div class="quick-card">
+
+                    <div class="icon">📘</div>
+
+                    <h2>Borrowed Book History</h2>
+
+                    <p>
+
+                        View complete borrowing
+                        and returned book history records.
+
+                    </p>
+
+                    <a href="/borrowed-history/">
+
+                        View History
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- FOOTER -->
+
+        <div class="footer">
+
+            Smart Library Management System © 2026
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

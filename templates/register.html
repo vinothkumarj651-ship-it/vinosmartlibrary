@@ -1,0 +1,678 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Registration</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Segoe UI',sans-serif;
+        }
+
+        body{
+
+            min-height:100vh;
+
+            background:
+            linear-gradient(
+            rgba(0,0,0,0.65),
+            rgba(0,0,0,0.65)
+            ),
+            url('/static/images/bg.webp');
+
+            background-size:cover;
+            background-position:center;
+            background-attachment:fixed;
+
+            display:flex;
+            justify-content:center;
+            align-items:center;
+
+            padding:30px;
+
+        }
+
+        .register-container{
+
+            width:100%;
+            max-width:1200px;
+
+            display:grid;
+
+            grid-template-columns:1fr 1fr;
+
+            background:rgba(255,255,255,0.10);
+
+            backdrop-filter:blur(18px);
+
+            border-radius:35px;
+
+            overflow:hidden;
+
+            border:1px solid rgba(255,255,255,0.12);
+
+            box-shadow:0 10px 35px rgba(0,0,0,0.35);
+
+        }
+
+        /* ================= LEFT ================= */
+
+        .left-side{
+
+            padding:60px;
+
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+
+            background:rgba(255,255,255,0.05);
+
+        }
+
+        .logo{
+
+            width:120px;
+            height:120px;
+
+            background:white;
+
+            border-radius:50%;
+
+            padding:10px;
+
+            margin-bottom:30px;
+
+        }
+
+        .left-side h1{
+
+            font-size:55px;
+
+            line-height:70px;
+
+            color:white;
+
+            margin-bottom:25px;
+
+        }
+
+        .left-side p{
+
+            color:#ddd;
+
+            font-size:20px;
+
+            line-height:36px;
+
+        }
+
+        /* ================= RIGHT ================= */
+
+        .right-side{
+
+            padding:55px;
+
+            background:rgba(255,255,255,0.03);
+
+            overflow-y:auto;
+
+        }
+
+        .form-title{
+
+            font-size:42px;
+
+            color:white;
+
+            margin-bottom:10px;
+
+        }
+
+        .form-sub{
+
+            color:#ddd;
+
+            margin-bottom:35px;
+
+            font-size:16px;
+
+        }
+
+        form{
+
+            width:100%;
+
+        }
+
+        .input-box{
+
+            margin-bottom:22px;
+
+        }
+
+        .input-box label{
+
+            display:block;
+
+            color:white;
+
+            margin-bottom:10px;
+
+            font-size:16px;
+
+            font-weight:600;
+
+        }
+
+        .input-box input,
+        .input-box select{
+
+            width:100%;
+
+            padding:16px 18px;
+
+            border:none;
+
+            outline:none;
+
+            border-radius:14px;
+
+            background:rgba(255,255,255,0.10);
+
+            color:white;
+
+            font-size:16px;
+
+            border:1px solid rgba(255,255,255,0.08);
+
+        }
+
+        .input-box input::placeholder{
+
+            color:#ddd;
+
+        }
+
+        select option{
+
+            color:black;
+
+        }
+
+        /* ================= IMAGE INPUT ================= */
+
+        .image-upload{
+
+            width:100%;
+
+            padding:14px;
+
+            border-radius:14px;
+
+            background:rgba(255,255,255,0.10);
+
+            border:1px solid rgba(255,255,255,0.08);
+
+            color:white;
+
+        }
+
+        .preview-box{
+
+            margin-top:18px;
+
+            text-align:center;
+
+        }
+
+        .preview-image{
+
+            width:140px;
+            height:140px;
+
+            border-radius:50%;
+
+            object-fit:cover;
+
+            border:4px solid rgba(255,255,255,0.2);
+
+            display:none;
+
+        }
+
+        .register-btn{
+
+            width:100%;
+
+            padding:17px;
+
+            border:none;
+
+            outline:none;
+
+            border-radius:14px;
+
+            background:#2563eb;
+
+            color:white;
+
+            font-size:18px;
+
+            font-weight:700;
+
+            cursor:pointer;
+
+            transition:0.3s;
+
+            margin-top:10px;
+
+        }
+
+        .register-btn:hover{
+
+            background:#1d4ed8;
+
+            transform:translateY(-2px);
+
+        }
+
+        .bottom-text{
+
+            text-align:center;
+
+            margin-top:25px;
+
+            color:#ddd;
+
+            font-size:15px;
+
+        }
+
+        .bottom-text a{
+
+            color:#60a5fa;
+
+            text-decoration:none;
+
+            font-weight:600;
+
+        }
+
+        /* ================= ALERT ================= */
+
+        .success{
+
+            background:rgba(34,197,94,0.18);
+
+            color:#4ade80;
+
+            padding:15px;
+
+            border-radius:12px;
+
+            margin-bottom:22px;
+
+            border:1px solid rgba(34,197,94,0.25);
+
+        }
+
+        .error{
+
+            background:rgba(239,68,68,0.18);
+
+            color:#f87171;
+
+            padding:15px;
+
+            border-radius:12px;
+
+            margin-bottom:22px;
+
+            border:1px solid rgba(239,68,68,0.25);
+
+        }
+
+        /* ================= MOBILE ================= */
+
+        @media(max-width:950px){
+
+            .register-container{
+
+                grid-template-columns:1fr;
+
+            }
+
+            .left-side{
+
+                text-align:center;
+                align-items:center;
+
+                padding:40px;
+
+            }
+
+            .left-side h1{
+
+                font-size:40px;
+                line-height:55px;
+
+            }
+
+            .left-side p{
+
+                font-size:18px;
+                line-height:30px;
+
+            }
+
+            .right-side{
+
+                padding:35px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="register-container">
+
+        <!-- ================= LEFT ================= -->
+
+        <div class="left-side">
+
+            <img
+                src="/static/images/logo.png"
+                class="logo"
+            >
+
+            <h1>
+
+                SMART
+                <br>
+                LIBRARY
+
+            </h1>
+
+            <p>
+
+                Create your student account to access
+                Anna University Smart Library services,
+                request books and manage borrowing activity.
+
+            </p>
+
+        </div>
+
+        <!-- ================= RIGHT ================= -->
+
+        <div class="right-side">
+
+            <h1 class="form-title">
+
+                Student Registration
+
+            </h1>
+
+            <p class="form-sub">
+
+                Fill all details correctly
+
+            </p>
+
+            {% if success %}
+
+            <div class="success">
+
+                {{ success }}
+
+            </div>
+
+            {% endif %}
+
+            {% if error %}
+
+            <div class="error">
+
+                {{ error }}
+
+            </div>
+
+            {% endif %}
+
+            <form method="POST" enctype="multipart/form-data">
+
+                {% csrf_token %}
+
+                <div class="input-box">
+
+                    <label>
+
+                        👤 Username
+
+                    </label>
+
+                    <input
+                        type="text"
+                        name="username"
+                        placeholder="Enter Username"
+                        required
+                    >
+
+                </div>
+
+                <div class="input-box">
+
+                    <label>
+
+                        📧 Email ID
+
+                    </label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Enter Email ID"
+                        required
+                    >
+
+                </div>
+
+                <div class="input-box">
+
+                    <label>
+
+                        🎓 Department
+
+                    </label>
+
+                    <select name="department" required>
+
+                        <option value="">Select Department</option>
+
+                        <option>CSE</option>
+
+                        <option>IT</option>
+
+                        <option>ECE</option>
+
+                        <option>EEE</option>
+
+                        <option>MECH</option>
+
+                        <option>CIVIL</option>
+
+                        <option>MBA</option>
+
+                        <option>AIML</option>
+
+                    </select>
+
+                </div>
+
+                <div class="input-box">
+
+                    <label>
+
+                        📘 Year
+
+                    </label>
+
+                    <select name="year" required>
+
+                        <option value="">Select Year</option>
+
+                        <option>1st Year</option>
+
+                        <option>2nd Year</option>
+
+                        <option>3rd Year</option>
+
+                        <option>4th Year</option>
+
+                    </select>
+
+                </div>
+
+                <div class="input-box">
+
+                    <label>
+
+                        🆔 Register Number
+
+                    </label>
+
+                    <input
+                        type="text"
+                        name="reg_no"
+                        placeholder="Enter Register Number"
+                        maxlength="12"
+                        required
+                    >
+
+                </div>
+
+                <div class="input-box">
+
+                    <label>
+
+                        📞 Phone Number
+
+                    </label>
+
+                    <input
+                        type="text"
+                        name="phone"
+                        placeholder="Enter Phone Number"
+                        maxlength="10"
+                        pattern="[0-9]{10}"
+                        required
+                    >
+
+                </div>
+
+                <div class="input-box">
+
+                    <label>
+
+                        🖼 Upload Student Image
+
+                    </label>
+
+                    <input
+                        type="file"
+                        name="student_image"
+                        accept="image/*"
+                        capture="environment"
+                        class="image-upload"
+                        onchange="previewImage(event)"
+                    >
+
+                    <div class="preview-box">
+
+                        <img
+                            id="preview"
+                            class="preview-image"
+                        >
+
+                    </div>
+
+                </div>
+
+                <div class="input-box">
+
+                    <label>
+
+                        🔐 Security PIN
+
+                    </label>
+
+                    <input
+                        type="password"
+                        name="pin"
+                        placeholder="Create 4 Digit PIN"
+                        maxlength="4"
+                        pattern="[0-9]{4}"
+                        required
+                    >
+
+                </div>
+
+                <button type="submit" class="register-btn">
+
+                    Register Now
+
+                </button>
+
+            </form>
+
+            <div class="bottom-text">
+
+                Already have an account?
+
+                <a href="/login/">
+
+                    Student Login
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= IMAGE PREVIEW ================= -->
+
+    <script>
+
+        function previewImage(event){
+
+            const preview = document.getElementById('preview');
+
+            preview.src = URL.createObjectURL(event.target.files[0]);
+
+            preview.style.display = "block";
+
+        }
+
+    </script>
+
+</body>
+
+</html>

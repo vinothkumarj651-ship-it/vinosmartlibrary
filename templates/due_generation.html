@@ -1,0 +1,699 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Due Generation</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Segoe UI',sans-serif;
+        }
+
+        body{
+
+            min-height:100vh;
+
+            background:
+            linear-gradient(
+            rgba(0,0,0,0.72),
+            rgba(0,0,0,0.72)
+            ),
+            url('/static/images/bg.webp');
+
+            background-size:cover;
+            background-position:center;
+            background-attachment:fixed;
+
+            color:white;
+
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar{
+
+            width:100%;
+
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+
+            padding:18px 40px;
+
+            background:rgba(255,255,255,0.08);
+
+            backdrop-filter:blur(14px);
+
+            border-bottom:1px solid rgba(255,255,255,0.1);
+
+        }
+
+        .logo-box{
+
+            display:flex;
+            align-items:center;
+
+        }
+
+        .logo{
+
+            width:60px;
+            height:60px;
+
+            border-radius:50%;
+
+            background:white;
+
+            padding:5px;
+
+            margin-right:14px;
+
+        }
+
+        .logo-text h1{
+
+            font-size:30px;
+
+            font-weight:700;
+
+        }
+
+        .logo-text p{
+
+            color:#ddd;
+
+            font-size:14px;
+
+            margin-top:4px;
+
+        }
+
+        .back-btn{
+
+            text-decoration:none;
+
+            background:#2563eb;
+
+            color:white;
+
+            padding:12px 24px;
+
+            border-radius:12px;
+
+            font-weight:600;
+
+            transition:0.3s;
+
+        }
+
+        .back-btn:hover{
+
+            background:#1d4ed8;
+
+        }
+
+        /* ================= CONTAINER ================= */
+
+        .container{
+
+            width:94%;
+
+            margin:auto;
+
+            padding:40px 0;
+
+        }
+
+        .page-title{
+
+            font-size:42px;
+
+            margin-bottom:30px;
+
+            text-align:center;
+
+            font-weight:800;
+
+        }
+
+        /* ================= TABLE ================= */
+
+        .table-card{
+
+            background:rgba(255,255,255,0.10);
+
+            backdrop-filter:blur(16px);
+
+            border-radius:28px;
+
+            padding:30px;
+
+            border:1px solid rgba(255,255,255,0.12);
+
+            box-shadow:0 8px 30px rgba(0,0,0,0.35);
+
+        }
+
+        .table-box{
+
+            overflow-x:auto;
+
+        }
+
+        table{
+
+            width:100%;
+
+            border-collapse:collapse;
+
+            overflow:hidden;
+
+            border-radius:18px;
+
+        }
+
+        table th{
+
+            background:#2563eb;
+
+            padding:18px;
+
+            font-size:17px;
+
+            white-space:nowrap;
+
+        }
+
+        table td{
+
+            background:rgba(255,255,255,0.06);
+
+            padding:18px;
+
+            text-align:center;
+
+            border-bottom:1px solid rgba(255,255,255,0.08);
+
+            font-size:15px;
+
+        }
+
+        tr:hover td{
+
+            background:rgba(255,255,255,0.10);
+
+        }
+
+        /* ================= BUTTONS ================= */
+
+        .generate-btn{
+
+            border:none;
+
+            background:#f59e0b;
+
+            color:white;
+
+            padding:11px 18px;
+
+            border-radius:10px;
+
+            font-weight:700;
+
+            cursor:pointer;
+
+            transition:0.3s;
+
+        }
+
+        .generate-btn:hover{
+
+            background:#d97706;
+
+            transform:translateY(-2px);
+
+        }
+
+        .clear-btn{
+
+            border:none;
+
+            background:#22c55e;
+
+            color:white;
+
+            padding:11px 18px;
+
+            border-radius:10px;
+
+            font-weight:700;
+
+            cursor:pointer;
+
+            transition:0.3s;
+
+        }
+
+        .clear-btn:hover{
+
+            background:#16a34a;
+
+            transform:translateY(-2px);
+
+        }
+
+        .due-active{
+
+            color:#facc15;
+
+            font-weight:700;
+
+            font-size:15px;
+
+        }
+
+        .due-clear{
+
+            color:#22c55e;
+
+            font-weight:700;
+
+            font-size:15px;
+
+        }
+
+        .empty{
+
+            text-align:center;
+
+            padding:35px;
+
+            font-size:20px;
+
+            color:#ddd;
+
+        }
+
+        /* ================= POPUP ================= */
+
+        .popup-overlay{
+
+            position:fixed;
+
+            top:0;
+            left:0;
+
+            width:100%;
+            height:100%;
+
+            background:rgba(0,0,0,0.7);
+
+            display:none;
+
+            justify-content:center;
+            align-items:center;
+
+            z-index:999;
+
+        }
+
+        .popup-box{
+
+            width:90%;
+            max-width:420px;
+
+            background:white;
+
+            color:#111;
+
+            border-radius:24px;
+
+            padding:35px;
+
+            text-align:center;
+
+            animation:popup 0.3s ease;
+
+        }
+
+        @keyframes popup{
+
+            from{
+
+                transform:scale(0.7);
+                opacity:0;
+
+            }
+
+            to{
+
+                transform:scale(1);
+                opacity:1;
+
+            }
+
+        }
+
+        .popup-box h2{
+
+            margin-bottom:15px;
+
+            font-size:28px;
+
+        }
+
+        .popup-box p{
+
+            font-size:17px;
+
+            margin-bottom:28px;
+
+            line-height:28px;
+
+        }
+
+        .popup-buttons{
+
+            display:flex;
+            justify-content:center;
+            gap:15px;
+
+        }
+
+        .confirm-btn{
+
+            border:none;
+
+            background:#2563eb;
+
+            color:white;
+
+            padding:12px 24px;
+
+            border-radius:10px;
+
+            font-weight:700;
+
+            cursor:pointer;
+
+        }
+
+        .cancel-btn{
+
+            border:none;
+
+            background:#ef4444;
+
+            color:white;
+
+            padding:12px 24px;
+
+            border-radius:10px;
+
+            font-weight:700;
+
+            cursor:pointer;
+
+        }
+
+        @media(max-width:900px){
+
+            .navbar{
+
+                flex-direction:column;
+
+                gap:15px;
+
+            }
+
+            .page-title{
+
+                font-size:30px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+
+    <div class="navbar">
+
+        <div class="logo-box">
+
+            <img
+                src="/static/images/logo.png"
+                class="logo"
+            >
+
+            <div class="logo-text">
+
+                <h1>SMART LIBRARY</h1>
+
+                <p>Anna University Regional Campus Madurai</p>
+
+            </div>
+
+        </div>
+
+        <a href="/admin-dashboard/" class="back-btn">
+
+            ⬅ Back Dashboard
+
+        </a>
+
+    </div>
+
+    <!-- ================= MAIN ================= -->
+
+    <div class="container">
+
+        <h1 class="page-title">
+
+            📌 Due Generation Panel
+
+        </h1>
+
+        <div class="table-card">
+
+            {% if issues %}
+
+            <div class="table-box">
+
+                <table>
+
+                    <tr>
+
+                        <th>Student Name</th>
+
+                        <th>Department</th>
+
+                        <th>Book Name</th>
+
+                        <th>Author</th>
+
+                        <th>Borrowed Date</th>
+
+                        <th>Due Status</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                    {% for issue in issues %}
+
+                    <tr>
+
+                        <td>
+
+                            {{ issue.student.username }}
+
+                        </td>
+
+                        <td>
+
+                            {{ issue.student.studentprofile.department }}
+
+                        </td>
+
+                        <td>
+
+                            {{ issue.book.title }}
+
+                        </td>
+
+                        <td>
+
+                            {{ issue.book.author }}
+
+                        </td>
+
+                        <td>
+
+                            {{ issue.issued_at|date:"d M Y - h:i A" }}
+
+                        </td>
+
+                        <td>
+
+                            {% if issue.due_generated %}
+
+                                <span class="due-active">
+
+                                    ⚠ Due Generated
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="due-clear">
+
+                                    ✅ No Due
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            {% if not issue.due_generated %}
+
+                            <button
+                                class="generate-btn"
+                                onclick="openPopup('{{ issue.id }}')"
+                            >
+
+                                Generate Due
+
+                            </button>
+
+                            {% else %}
+
+                            <a href="/clear-due/{{ issue.id }}/">
+
+                                <button class="clear-btn">
+
+                                    Clear Due
+
+                                </button>
+
+                            </a>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="empty">
+
+                No Borrowed Books Found
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    <!-- ================= POPUP ================= -->
+
+    <div class="popup-overlay" id="popup">
+
+        <div class="popup-box">
+
+            <h2>
+
+                Confirm Due Generation
+
+            </h2>
+
+            <p>
+
+                Are you sure you want to generate due for this student?
+
+            </p>
+
+            <div class="popup-buttons">
+
+                <form method="POST" id="dueForm">
+
+                    {% csrf_token %}
+
+                    <button
+                        type="submit"
+                        class="confirm-btn"
+                    >
+
+                        Confirm
+
+                    </button>
+
+                </form>
+
+                <button
+                    class="cancel-btn"
+                    onclick="closePopup()"
+                >
+
+                    Cancel
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= SCRIPT ================= -->
+
+    <script>
+
+        function openPopup(issueId){
+
+            document.getElementById('popup').style.display='flex';
+
+            document.getElementById('dueForm').action =
+            "/generate-due/" + issueId + "/";
+
+        }
+
+        function closePopup(){
+
+            document.getElementById('popup').style.display='none';
+
+        }
+
+    </script>
+
+</body>
+
+</html>

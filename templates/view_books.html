@@ -1,0 +1,838 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>View Books</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Segoe UI',sans-serif;
+        }
+
+        body{
+
+            min-height:100vh;
+
+            background:
+            linear-gradient(
+            rgba(0,0,0,0.60),
+            rgba(0,0,0,0.60)
+            ),
+            url("{% static 'images/bg.webp' %}");
+
+            background-size:cover;
+            background-position:center;
+            background-attachment:fixed;
+
+            padding:40px;
+
+        }
+
+        .container{
+
+            width:100%;
+            max-width:1500px;
+
+            margin:auto;
+
+        }
+
+        /* ================= HEADER ================= */
+
+        .top-bar{
+
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+
+            margin-bottom:35px;
+
+            background:rgba(255,255,255,0.12);
+
+            padding:20px 30px;
+
+            border-radius:22px;
+
+            backdrop-filter:blur(14px);
+
+            border:1px solid rgba(255,255,255,0.15);
+
+        }
+
+        .title-box{
+
+            display:flex;
+            align-items:center;
+
+        }
+
+        .logo{
+
+            width:85px;
+            height:85px;
+
+            object-fit:contain;
+
+            background:white;
+
+            border-radius:50%;
+
+            padding:6px;
+
+            margin-right:18px;
+
+        }
+
+        .title-box h1{
+
+            color:white;
+
+            font-size:36px;
+
+            font-weight:700;
+
+        }
+
+        .title-box p{
+
+            color:#ddd;
+
+            margin-top:5px;
+
+            font-size:16px;
+
+        }
+
+        .back-btn{
+
+            text-decoration:none;
+
+            background:#1565c0;
+
+            color:white;
+
+            padding:14px 24px;
+
+            border-radius:12px;
+
+            font-size:17px;
+
+            font-weight:600;
+
+            transition:0.3s;
+
+        }
+
+        .back-btn:hover{
+
+            background:#0d47a1;
+
+        }
+
+        /* ================= SEARCH ================= */
+
+        .search-form{
+
+            width:100%;
+
+            margin-bottom:35px;
+
+        }
+
+        .search-box{
+
+            width:100%;
+
+            display:flex;
+
+        }
+
+        .search-box input{
+
+            flex:1;
+
+            padding:18px;
+
+            border:none;
+
+            outline:none;
+
+            border-radius:14px 0 0 14px;
+
+            font-size:18px;
+
+            background:rgba(255,255,255,0.95);
+
+        }
+
+        .search-box button{
+
+            width:190px;
+
+            border:none;
+
+            background:#1565c0;
+
+            color:white;
+
+            font-size:18px;
+
+            font-weight:700;
+
+            border-radius:0 14px 14px 0;
+
+            cursor:pointer;
+
+            transition:0.3s;
+
+        }
+
+        .search-box button:hover{
+
+            background:#0d47a1;
+
+        }
+
+        /* ================= BOOK GRID ================= */
+
+        .book-grid{
+
+            display:grid;
+
+            grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+
+            gap:30px;
+
+        }
+
+        /* ================= CARD ================= */
+
+        .book-card{
+
+            background:rgba(255,255,255,0.13);
+
+            backdrop-filter:blur(18px);
+
+            border-radius:28px;
+
+            padding:25px;
+
+            border:1px solid rgba(255,255,255,0.15);
+
+            box-shadow:0 10px 30px rgba(0,0,0,0.35);
+
+            transition:0.35s;
+
+        }
+
+        .book-card:hover{
+
+            transform:translateY(-8px);
+
+        }
+
+        /* ================= IMAGE ================= */
+
+        .image-box{
+
+            width:100%;
+            height:500px;
+
+            border-radius:22px;
+
+            overflow:hidden;
+
+            margin-bottom:24px;
+
+            cursor:pointer;
+
+            background:rgba(255,255,255,0.08);
+
+            border:2px solid rgba(255,255,255,0.15);
+
+            position:relative;
+
+        }
+
+        .book-image{
+
+            width:100%;
+            height:100%;
+
+            object-fit:cover;
+
+            transition:0.4s;
+
+        }
+
+        .image-box:hover .book-image{
+
+            transform:scale(1.06);
+
+        }
+
+        .zoom-text{
+
+            position:absolute;
+
+            bottom:12px;
+            right:12px;
+
+            background:rgba(0,0,0,0.7);
+
+            color:white;
+
+            padding:8px 14px;
+
+            border-radius:30px;
+
+            font-size:14px;
+
+            font-weight:600;
+
+        }
+
+        .no-image{
+
+            width:100%;
+            height:500px;
+
+            display:flex;
+            justify-content:center;
+            align-items:center;
+
+            background:rgba(255,255,255,0.08);
+
+            border-radius:22px;
+
+            margin-bottom:24px;
+
+            font-size:100px;
+
+        }
+
+        /* ================= BOOK DETAILS ================= */
+
+        .book-title{
+
+            color:white;
+
+            font-size:32px;
+
+            font-weight:700;
+
+            margin-bottom:16px;
+
+            line-height:44px;
+
+        }
+
+        .book-info{
+
+            color:#f1f1f1;
+
+            font-size:18px;
+
+            margin-bottom:14px;
+
+            line-height:28px;
+
+        }
+
+        .available{
+
+            display:inline-block;
+
+            margin-top:10px;
+
+            padding:11px 22px;
+
+            border-radius:30px;
+
+            background:#198754;
+
+            color:white;
+
+            font-weight:700;
+
+            font-size:15px;
+
+        }
+
+        .not-available{
+
+            display:inline-block;
+
+            margin-top:10px;
+
+            padding:11px 22px;
+
+            border-radius:30px;
+
+            background:#dc3545;
+
+            color:white;
+
+            font-weight:700;
+
+            font-size:15px;
+
+        }
+
+        /* ================= BUTTON ================= */
+
+        .request-btn{
+
+            display:block;
+
+            width:100%;
+
+            text-align:center;
+
+            margin-top:24px;
+
+            text-decoration:none;
+
+            padding:17px;
+
+            border-radius:16px;
+
+            background:linear-gradient(
+            135deg,
+            #1565c0,
+            #1976d2
+            );
+
+            color:white;
+
+            font-size:19px;
+
+            font-weight:700;
+
+            transition:0.3s;
+
+            border:none;
+
+            cursor:pointer;
+
+        }
+
+        .request-btn:hover{
+
+            background:linear-gradient(
+            135deg,
+            #0d47a1,
+            #1565c0
+            );
+
+            transform:scale(1.02);
+
+        }
+
+        /* ================= EMPTY ================= */
+
+        .empty{
+
+            width:100%;
+
+            text-align:center;
+
+            padding:90px 20px;
+
+            background:rgba(255,255,255,0.1);
+
+            border-radius:24px;
+
+            color:white;
+
+            font-size:26px;
+
+            backdrop-filter:blur(14px);
+
+        }
+
+        /* ================= IMAGE MODAL ================= */
+
+        .image-modal{
+
+            position:fixed;
+
+            top:0;
+            left:0;
+
+            width:100%;
+            height:100%;
+
+            background:rgba(0,0,0,0.94);
+
+            display:none;
+
+            justify-content:center;
+            align-items:center;
+
+            z-index:9999;
+
+            padding:25px;
+
+        }
+
+        .image-modal img{
+
+            max-width:96%;
+            max-height:96%;
+
+            border-radius:22px;
+
+            box-shadow:0 0 35px rgba(255,255,255,0.2);
+
+        }
+
+        .close-btn{
+
+            position:absolute;
+
+            top:20px;
+            right:35px;
+
+            color:white;
+
+            font-size:55px;
+
+            cursor:pointer;
+
+            font-weight:bold;
+
+        }
+
+        /* ================= MOBILE ================= */
+
+        @media(max-width:900px){
+
+            body{
+
+                padding:18px;
+
+            }
+
+            .top-bar{
+
+                flex-direction:column;
+
+                text-align:center;
+
+                gap:20px;
+
+            }
+
+            .title-box{
+
+                flex-direction:column;
+
+            }
+
+            .logo{
+
+                margin-right:0;
+                margin-bottom:15px;
+
+            }
+
+            .search-box{
+
+                flex-direction:column;
+
+                gap:12px;
+
+            }
+
+            .search-box input{
+
+                border-radius:14px;
+
+            }
+
+            .search-box button{
+
+                width:100%;
+
+                border-radius:14px;
+
+                padding:16px;
+
+            }
+
+            .image-box{
+
+                height:420px;
+
+            }
+
+            .no-image{
+
+                height:420px;
+
+            }
+
+            .book-title{
+
+                font-size:28px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- ================= TOP ================= -->
+
+        <div class="top-bar">
+
+            <div class="title-box">
+
+                <img
+                    src="{% static 'images/logo.png' %}"
+                    class="logo"
+                >
+
+                <div>
+
+                    <h1>SMART LIBRARY</h1>
+
+                    <p>Anna University Regional Campus Madurai</p>
+
+                </div>
+
+            </div>
+
+            <a href="/student-profile/" class="back-btn">
+
+                ⬅ Back To Profile
+
+            </a>
+
+        </div>
+
+        <!-- ================= SEARCH ================= -->
+
+        <form method="GET" class="search-form">
+
+            <div class="search-box">
+
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="Search Book Title / Author / Section"
+                    value="{{ request.GET.search }}"
+                >
+
+                <button type="submit">
+
+                    SEARCH
+
+                </button>
+
+            </div>
+
+        </form>
+
+        <!-- ================= BOOKS ================= -->
+
+        {% if books %}
+
+        <div class="book-grid">
+
+            {% for book in books %}
+
+            <div class="book-card">
+
+                {% if book.cover_image %}
+
+                    <div
+                        class="image-box"
+                        onclick="openImage('{{ book.cover_image.url }}')"
+                    >
+
+                        <img
+                            src="{{ book.cover_image.url }}"
+                            class="book-image"
+                        >
+
+                        <div class="zoom-text">
+
+                            🔍 View Full
+
+                        </div>
+
+                    </div>
+
+                {% else %}
+
+                    <div class="no-image">
+
+                        📚
+
+                    </div>
+
+                {% endif %}
+
+                <div class="book-title">
+
+                    {{ book.title }}
+
+                </div>
+
+                <div class="book-info">
+
+                    👨‍🏫 Author :
+                    <b>{{ book.author }}</b>
+
+                </div>
+
+                <div class="book-info">
+
+                    🏷 Section :
+                    <b>{{ book.section }}</b>
+
+                </div>
+
+                <div class="book-info">
+
+                    📍 Rack :
+                    Row {{ book.row }}
+                    /
+                    Column {{ book.column }}
+
+                </div>
+
+                <div class="book-info">
+
+                    📦 Quantity :
+                    <b>{{ book.quantity }}</b>
+
+                </div>
+
+                {% if book.quantity > 0 %}
+
+                    <div class="available">
+
+                        ✅ Available
+
+                    </div>
+
+                    <button
+                        class="request-btn"
+                        onclick="confirmIssue('{{ book.id }}','{{ book.title }}')"
+                    >
+
+                        📩 Request Book Issue
+
+                    </button>
+
+                {% else %}
+
+                    <div class="not-available">
+
+                        ❌ Not Available
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <div class="empty">
+
+            📚 No Books Found
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    <!-- ================= IMAGE FULL VIEW ================= -->
+
+    <div class="image-modal" id="imageModal">
+
+        <span class="close-btn" onclick="closeImage()">
+
+            &times;
+
+        </span>
+
+        <img id="fullImage">
+
+    </div>
+
+    <!-- ================= SCRIPT ================= -->
+
+    <script>
+
+        function openImage(imageSrc){
+
+            document.getElementById("imageModal").style.display = "flex";
+
+            document.getElementById("fullImage").src = imageSrc;
+
+        }
+
+        function closeImage(){
+
+            document.getElementById("imageModal").style.display = "none";
+
+        }
+
+        window.onclick = function(event){
+
+            let modal = document.getElementById("imageModal");
+
+            if(event.target == modal){
+
+                modal.style.display = "none";
+
+            }
+
+        }
+
+        function confirmIssue(bookId, bookTitle){
+
+            let confirmBox = confirm(
+                "Do you want to request this book?\n\n" + bookTitle
+            );
+
+            if(confirmBox){
+
+                window.location.href = "/request-book/" + bookId + "/";
+
+            }
+
+        }
+
+    </script>
+
+</body>
+
+</html>

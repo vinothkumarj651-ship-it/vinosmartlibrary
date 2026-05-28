@@ -1,0 +1,749 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin View Books</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Segoe UI',sans-serif;
+        }
+
+        body{
+
+            min-height:100vh;
+
+            background:
+            linear-gradient(
+            rgba(0,0,0,0.65),
+            rgba(0,0,0,0.65)
+            ),
+            url('/static/images/bg.webp');
+
+            background-size:cover;
+            background-position:center;
+            background-attachment:fixed;
+
+            color:white;
+
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar{
+
+            width:100%;
+
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+
+            padding:18px 40px;
+
+            background:rgba(255,255,255,0.08);
+
+            backdrop-filter:blur(14px);
+
+            border-bottom:1px solid rgba(255,255,255,0.10);
+
+        }
+
+        .logo-box{
+
+            display:flex;
+            align-items:center;
+
+        }
+
+        .logo{
+
+            width:65px;
+            height:65px;
+
+            border-radius:50%;
+
+            background:white;
+
+            padding:6px;
+
+            margin-right:15px;
+
+        }
+
+        .logo-text h1{
+
+            font-size:30px;
+
+            font-weight:700;
+
+        }
+
+        .logo-text p{
+
+            color:#ddd;
+
+            font-size:14px;
+
+            margin-top:4px;
+
+        }
+
+        .nav-buttons{
+
+            display:flex;
+            gap:15px;
+
+        }
+
+        .dashboard-btn,
+        .logout-btn{
+
+            text-decoration:none;
+
+            padding:12px 22px;
+
+            border-radius:12px;
+
+            font-weight:600;
+
+            transition:0.3s;
+
+            color:white;
+
+        }
+
+        .dashboard-btn{
+
+            background:#2563eb;
+
+        }
+
+        .dashboard-btn:hover{
+
+            background:#1d4ed8;
+
+            transform:translateY(-2px);
+
+        }
+
+        .logout-btn{
+
+            background:#ef4444;
+
+        }
+
+        .logout-btn:hover{
+
+            background:#dc2626;
+
+            transform:translateY(-2px);
+
+        }
+
+        /* ================= CONTAINER ================= */
+
+        .container{
+
+            width:92%;
+
+            margin:auto;
+
+            padding-top:35px;
+            padding-bottom:40px;
+
+        }
+
+        /* ================= HEADER ================= */
+
+        .header-card{
+
+            background:rgba(255,255,255,0.10);
+
+            backdrop-filter:blur(16px);
+
+            border-radius:30px;
+
+            padding:45px;
+
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+
+            border:1px solid rgba(255,255,255,0.10);
+
+            box-shadow:0 10px 30px rgba(0,0,0,0.30);
+
+        }
+
+        .header-left h1{
+
+            font-size:58px;
+
+            line-height:75px;
+
+            margin-bottom:18px;
+
+        }
+
+        .header-left p{
+
+            color:#ddd;
+
+            font-size:20px;
+
+            line-height:35px;
+
+            width:80%;
+
+        }
+
+        .header-logo{
+
+            width:220px;
+
+            filter:drop-shadow(0 0 15px rgba(255,255,255,0.25));
+
+        }
+
+        /* ================= SEARCH ================= */
+
+        .search-box{
+
+            margin-top:30px;
+
+            background:rgba(255,255,255,0.10);
+
+            backdrop-filter:blur(16px);
+
+            border-radius:25px;
+
+            padding:25px;
+
+            border:1px solid rgba(255,255,255,0.10);
+
+        }
+
+        .search-form{
+
+            display:flex;
+
+            gap:15px;
+
+        }
+
+        .search-form input{
+
+            flex:1;
+
+            padding:16px 20px;
+
+            border:none;
+
+            outline:none;
+
+            border-radius:14px;
+
+            background:rgba(255,255,255,0.10);
+
+            color:white;
+
+            font-size:16px;
+
+            border:1px solid rgba(255,255,255,0.12);
+
+        }
+
+        .search-form input::placeholder{
+
+            color:#ddd;
+
+        }
+
+        .search-btn{
+
+            padding:16px 28px;
+
+            border:none;
+
+            border-radius:14px;
+
+            background:#2563eb;
+
+            color:white;
+
+            font-size:16px;
+
+            font-weight:700;
+
+            cursor:pointer;
+
+            transition:0.3s;
+
+        }
+
+        .search-btn:hover{
+
+            background:#1d4ed8;
+
+        }
+
+        /* ================= TABLE ================= */
+
+        .table-card{
+
+            margin-top:30px;
+
+            background:rgba(255,255,255,0.10);
+
+            backdrop-filter:blur(16px);
+
+            border-radius:28px;
+
+            padding:30px;
+
+            border:1px solid rgba(255,255,255,0.10);
+
+            box-shadow:0 10px 30px rgba(0,0,0,0.25);
+
+        }
+
+        .table-title{
+
+            font-size:34px;
+
+            margin-bottom:25px;
+
+        }
+
+        .table-box{
+
+            overflow-x:auto;
+
+        }
+
+        table{
+
+            width:100%;
+
+            border-collapse:collapse;
+
+        }
+
+        table th{
+
+            background:#2563eb;
+
+            padding:18px;
+
+            font-size:17px;
+
+        }
+
+        table td{
+
+            background:rgba(255,255,255,0.06);
+
+            padding:18px;
+
+            text-align:center;
+
+            border-bottom:1px solid rgba(255,255,255,0.08);
+
+            font-size:16px;
+
+            vertical-align:middle;
+
+        }
+
+        table tr:hover td{
+
+            background:rgba(255,255,255,0.10);
+
+        }
+
+        .book-cover{
+
+            width:70px;
+            height:90px;
+
+            object-fit:cover;
+
+            border-radius:10px;
+
+            border:2px solid rgba(255,255,255,0.20);
+
+        }
+
+        .no-image{
+
+            width:70px;
+            height:90px;
+
+            border-radius:10px;
+
+            background:rgba(255,255,255,0.08);
+
+            display:flex;
+            align-items:center;
+            justify-content:center;
+
+            font-size:12px;
+
+            color:#ddd;
+
+            margin:auto;
+
+        }
+
+        .edit-btn{
+
+            text-decoration:none;
+
+            background:#f59e0b;
+
+            color:white;
+
+            padding:10px 18px;
+
+            border-radius:10px;
+
+            font-size:14px;
+
+            font-weight:700;
+
+            transition:0.3s;
+
+            display:inline-block;
+
+        }
+
+        .edit-btn:hover{
+
+            background:#d97706;
+
+            transform:translateY(-2px);
+
+        }
+
+        .empty{
+
+            text-align:center;
+
+            padding:35px;
+
+            font-size:20px;
+
+            color:#ddd;
+
+        }
+
+        /* ================= MOBILE ================= */
+
+        @media(max-width:1000px){
+
+            .header-card{
+
+                flex-direction:column;
+
+                text-align:center;
+
+            }
+
+            .header-left p{
+
+                width:100%;
+
+            }
+
+            .header-logo{
+
+                margin-top:25px;
+
+                width:170px;
+
+            }
+
+        }
+
+        @media(max-width:750px){
+
+            .navbar{
+
+                flex-direction:column;
+
+                gap:15px;
+
+            }
+
+            .nav-buttons{
+
+                width:100%;
+                justify-content:center;
+
+            }
+
+            .search-form{
+
+                flex-direction:column;
+
+            }
+
+            .header-left h1{
+
+                font-size:42px;
+
+                line-height:58px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+
+    <div class="navbar">
+
+        <div class="logo-box">
+
+            <img
+                src="/static/images/logo.png"
+                class="logo"
+            >
+
+            <div class="logo-text">
+
+                <h1>SMART LIBRARY</h1>
+
+                <p>Anna University Regional Campus Madurai</p>
+
+            </div>
+
+        </div>
+
+        <div class="nav-buttons">
+
+            <a href="/admin-dashboard/" class="dashboard-btn">
+
+                ⬅ Dashboard
+
+            </a>
+
+            <a href="/logout/" class="logout-btn">
+
+                Logout
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- ================= MAIN ================= -->
+
+    <div class="container">
+
+        <!-- HEADER -->
+
+        <div class="header-card">
+
+            <div class="header-left">
+
+                <h1>
+
+                    ADMIN
+                    <br>
+                    VIEW BOOKS
+
+                </h1>
+
+                <p>
+
+                    Manage all library books,
+                    edit book details and monitor
+                    availability easily.
+
+                </p>
+
+            </div>
+
+            <img
+                src="/static/images/logo.png"
+                class="header-logo"
+            >
+
+        </div>
+
+        <!-- SEARCH -->
+
+        <div class="search-box">
+
+            <form method="GET" class="search-form">
+
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="Search Book Name / Author / Section"
+                    value="{{ request.GET.search }}"
+                >
+
+                <button type="submit" class="search-btn">
+
+                    🔍 Search
+
+                </button>
+
+            </form>
+
+        </div>
+
+        <!-- TABLE -->
+
+        <div class="table-card">
+
+            <h2 class="table-title">
+
+                📚 Library Book Records
+
+            </h2>
+
+            {% if books %}
+
+            <div class="table-box">
+
+                <table>
+
+                    <tr>
+
+                        <th>Cover</th>
+
+                        <th>Book Name</th>
+
+                        <th>Author</th>
+
+                        <th>Section</th>
+
+                        <th>Row</th>
+
+                        <th>Column</th>
+
+                        <th>Quantity</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                    {% for book in books %}
+
+                    <tr>
+
+                        <td>
+
+                            {% if book.cover_image %}
+
+                            <img
+                                src="{{ book.cover_image.url }}"
+                                class="book-cover"
+                            >
+
+                            {% else %}
+
+                            <div class="no-image">
+
+                                No Image
+
+                            </div>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            {{ book.title }}
+
+                        </td>
+
+                        <td>
+
+                            {{ book.author }}
+
+                        </td>
+
+                        <td>
+
+                            {{ book.section }}
+
+                        </td>
+
+                        <td>
+
+                            {{ book.row }}
+
+                        </td>
+
+                        <td>
+
+                            {{ book.column }}
+
+                        </td>
+
+                        <td>
+
+                            {{ book.quantity }}
+
+                        </td>
+
+                        <td>
+
+                            <a
+                                href="/edit-book/{{ book.id }}/"
+                                class="edit-btn"
+                            >
+
+                                ✏ Edit
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="empty">
+
+                No Books Found
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
