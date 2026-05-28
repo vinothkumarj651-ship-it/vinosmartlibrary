@@ -1,0 +1,1 @@
+web: gunicorn smartlibrary.wsgi:application
