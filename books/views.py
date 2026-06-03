@@ -503,7 +503,6 @@ def approve_request(request, request_id):
     role = request.session.get('role')
 
     if role != 'admin':
-
         return redirect('staff_login')
 
     req = BookRequest.objects.get(id=request_id)
@@ -513,19 +512,17 @@ def approve_request(request, request_id):
     if book.quantity > 0:
 
         BookIssue.objects.create(
-
             student=req.student,
             book=book
-
         )
 
         book.quantity -= 1
-
         book.save()
 
         req.status = "Approved"
-
         req.save()
+
+    return redirect('student_book_requests')
 
         # ================= SEND APPROVE EMAIL =================
 
@@ -562,14 +559,14 @@ def reject_request(request, request_id):
     role = request.session.get('role')
 
     if role != 'admin':
-
         return redirect('staff_login')
 
     req = BookRequest.objects.get(id=request_id)
 
     req.status = "Rejected"
-
     req.save()
+
+    return redirect('student_book_requests')
 
     # ================= SEND REJECT EMAIL =================
 
@@ -726,18 +723,17 @@ def generate_due(request, issue_id):
     role = request.session.get('role')
 
     if role != 'admin':
-
         return redirect('staff_login')
 
     issue = BookIssue.objects.get(id=issue_id)
 
     issue.due_generated = True
-
     issue.due_generated_at = timezone.now()
-
     issue.due_return_date = timezone.now() + timedelta(days=2)
 
     issue.save()
+
+    return redirect('due_generation')
 
     # ================= SEND DUE EMAIL =================
 
