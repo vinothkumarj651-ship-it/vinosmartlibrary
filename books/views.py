@@ -526,7 +526,7 @@ def approve_request(request, request_id):
 
         # ================= SEND APPROVE EMAIL =================
 
-        send_mail(
+    send_mail(
 
             'Book Request Approved',
 
