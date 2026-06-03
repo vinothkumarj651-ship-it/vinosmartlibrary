@@ -696,22 +696,24 @@ def borrowed_history(request):
 
 # ================= DUE GENERATION =================
 
-def generate_due(request, issue_id):
+def due_generation(request):
 
     role = request.session.get('role')
 
     if role != 'admin':
         return redirect('staff_login')
 
-    issue = BookIssue.objects.get(id=issue_id)
+    issues = BookIssue.objects.filter(
+        returned=False
+    ).order_by('-id')
 
-    issue.due_generated = True
-    issue.due_generated_at = timezone.now()
-    issue.due_return_date = timezone.now() + timedelta(days=2)
-
-    issue.save()
-
-    return redirect('due_generation')
+    return render(
+        request,
+        'due_generation.html',
+        {
+            'issues': issues
+        }
+    )
 
 
 # ================= GENERATE DUE =================
@@ -730,38 +732,6 @@ def generate_due(request, issue_id):
     issue.due_return_date = timezone.now() + timedelta(days=2)
 
     issue.save()
-
-    return redirect('due_generation')
-
-    # ================= SEND DUE EMAIL =================
-
-    send_mail(
-
-        'Library Due Notice',
-
-        f'''
-Hello {issue.student.username},
-
-A due has been generated for the book:
-
-Book Name: {issue.book.title}
-
-Return Date:
-{issue.due_return_date.strftime("%d-%m-%Y %I:%M %p")}
-
-Please return the book before the due date.
-
-Thank You,
-Smart Library
-        ''',
-
-        settings.EMAIL_HOST_USER,
-
-        [issue.student.email],
-
-        fail_silently=True
-
-    )
 
     return redirect('due_generation')
 
