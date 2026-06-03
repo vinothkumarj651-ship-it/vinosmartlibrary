@@ -498,8 +498,6 @@ def student_book_requests(request):
 
 # ================= APPROVE REQUEST =================
 
-# ================= APPROVE REQUEST =================
-
 def approve_request(request, request_id):
 
     role = request.session.get('role')
@@ -523,14 +521,9 @@ def approve_request(request, request_id):
         req.status = "Approved"
         req.save()
 
-    return redirect('student_book_requests')
-
-        # ================= SEND APPROVE EMAIL =================
-
-    send_mail(
-
+        # SEND MAIL
+        send_mail(
             'Book Request Approved',
-
             f'''
 Hello {req.student.username},
 
@@ -541,17 +534,14 @@ Please collect the book from the library.
 Thank You,
 Smart Library
             ''',
-
             settings.EMAIL_HOST_USER,
-
             [req.student.email],
-
-            fail_silently=True
-
+            fail_silently=False
         )
 
     return redirect('student_book_requests')
 
+       
 
 # ================= REJECT REQUEST =================
 
@@ -567,14 +557,8 @@ def reject_request(request, request_id):
     req.status = "Rejected"
     req.save()
 
-    return redirect('student_book_requests')
-
-    # ================= SEND REJECT EMAIL =================
-
     send_mail(
-
         'Book Request Rejected',
-
         f'''
 Hello {req.student.username},
 
@@ -585,16 +569,13 @@ Please contact library staff for more details.
 Thank You,
 Smart Library
         ''',
-
         settings.EMAIL_HOST_USER,
-
         [req.student.email],
-
-        fail_silently=True
-
+        fail_silently=False
     )
 
     return redirect('student_book_requests')
+   
 
 
 # ================= ISSUED BOOKS =================
@@ -732,6 +713,29 @@ def generate_due(request, issue_id):
     issue.due_return_date = timezone.now() + timedelta(days=2)
 
     issue.save()
+
+    # SEND MAIL
+    send_mail(
+        'Library Due Notice',
+        f'''
+Hello {issue.student.username},
+
+A due has been generated for the book:
+
+Book Name: {issue.book.title}
+
+Return Date:
+{issue.due_return_date.strftime("%d-%m-%Y %I:%M %p")}
+
+Please return the book before the due date.
+
+Thank You,
+Smart Library
+        ''',
+        settings.EMAIL_HOST_USER,
+        [issue.student.email],
+        fail_silently=False
+    )
 
     return redirect('due_generation')
 
