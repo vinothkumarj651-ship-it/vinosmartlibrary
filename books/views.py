@@ -498,6 +498,8 @@ def student_book_requests(request):
 
 # ================= APPROVE REQUEST =================
 
+# ================= APPROVE REQUEST =================
+
 def approve_request(request, request_id):
 
     role = request.session.get('role')
@@ -506,7 +508,6 @@ def approve_request(request, request_id):
         return redirect('staff_login')
 
     req = BookRequest.objects.get(id=request_id)
-
     book = req.book
 
     if book.quantity > 0:
@@ -695,25 +696,22 @@ def borrowed_history(request):
 
 # ================= DUE GENERATION =================
 
-def due_generation(request):
+def generate_due(request, issue_id):
 
     role = request.session.get('role')
 
     if role != 'admin':
-
         return redirect('staff_login')
 
-    issues = BookIssue.objects.filter(
+    issue = BookIssue.objects.get(id=issue_id)
 
-        returned=False
+    issue.due_generated = True
+    issue.due_generated_at = timezone.now()
+    issue.due_return_date = timezone.now() + timedelta(days=2)
 
-    ).order_by('-id')
+    issue.save()
 
-    return render(request, 'due_generation.html', {
-
-        'issues': issues
-
-    })
+    return redirect('due_generation')
 
 
 # ================= GENERATE DUE =================
