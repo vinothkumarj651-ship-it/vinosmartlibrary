@@ -536,7 +536,7 @@ Smart Library
             ''',
             settings.EMAIL_HOST_USER,
             [req.student.email],
-            fail_silently=False
+            fail_silently=True
         )
 
     return redirect('student_book_requests')
@@ -571,7 +571,7 @@ Smart Library
         ''',
         settings.EMAIL_HOST_USER,
         [req.student.email],
-        fail_silently=False
+        fail_silently=True
     )
 
     return redirect('student_book_requests')
@@ -734,7 +734,7 @@ Smart Library
         ''',
         settings.EMAIL_HOST_USER,
         [issue.student.email],
-        fail_silently=False
+        fail_silently=True
     )
 
     return redirect('due_generation')
