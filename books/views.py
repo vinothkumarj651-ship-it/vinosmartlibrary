@@ -521,34 +521,6 @@ def approve_request(request, request_id):
         req.status = "Approved"
         req.save()
 
-        print("Approve Request Started")
-        print("Student Email:", req.student.email)
-
-        try:
-            print("Before Mail")
-
-            send_mail(
-                'Book Request Approved',
-                f'''
-Hello {req.student.username},
-
-Your requested book "{book.title}" has been approved.
-
-Please collect the book from the library.
-
-Thank You,
-Smart Library
-                ''',
-                settings.EMAIL_HOST_USER,
-                [req.student.email],
-                fail_silently=False
-            )
-
-            print("Mail Sent Successfully")
-
-        except Exception as e:
-            print("MAIL ERROR:", str(e))
-
     return redirect('student_book_requests')
 
        
