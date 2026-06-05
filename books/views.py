@@ -525,7 +525,7 @@ def approve_request(request, request_id):
         req.status = "Approved"
         req.save()
         
-psend_mail(
+send_mail(
     'Book Request Approved',
     f'''
 Hello {req.student.username},
