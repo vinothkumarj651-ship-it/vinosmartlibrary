@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -33,7 +34,6 @@ MIDDLEWARE = [
 
     'django.middleware.security.SecurityMiddleware',
 
-    # WhiteNoise for Render Static Files
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -140,8 +140,6 @@ STATICFILES_DIRS = [
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# WhiteNoise Static File Storage
-
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # ================= MEDIA FILES =================
@@ -154,22 +152,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# ================= EMAIL SETTINGS =================
+# ================= RESEND SETTINGS =================
 
-# ================= EMAIL SETTINGS =================
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
-EMAIL_HOST = 'smtp.gmail.com'
-
-EMAIL_PORT = 587
-
-EMAIL_USE_TLS = True
-
-EMAIL_USE_SSL = False
-
-EMAIL_HOST_USER = 'vinothkumarj651@gmail.com'
-
-EMAIL_HOST_PASSWORD = 'vwyf wacy fojh frdj'
-
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+RESEND_API_KEY = os.getenv("re_fM69zqMy_5Juyc2v6adWy3WqyfbqwJXC3")
