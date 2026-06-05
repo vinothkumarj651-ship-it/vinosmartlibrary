@@ -525,11 +525,7 @@ def approve_request(request, request_id):
         req.status = "Approved"
         req.save()
         
-print("HOST =", settings.EMAIL_HOST)
-print("PORT =", settings.EMAIL_PORT)
-print("USER =", settings.EMAIL_HOST_USER)
-
-send_mail(
+psend_mail(
     'Book Request Approved',
     f'''
 Hello {req.student.username},
@@ -540,8 +536,8 @@ Please collect the book from the library.
 
 Thank You,
 Smart Library
-    ''',
-    settings.DEFAULT_FROM_EMAIL,
+''',
+    settings.EMAIL_HOST_USER,
     [req.student.email],
     fail_silently=False
 )
