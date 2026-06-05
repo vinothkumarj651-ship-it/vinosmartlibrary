@@ -729,7 +729,20 @@ Smart Library
 
     return redirect('due_generation')
 
+def due_generation(request):
 
+    role = request.session.get('role')
+
+    if role != 'admin':
+        return redirect('staff_login')
+
+    issues = BookIssue.objects.filter(
+        returned=False
+    ).order_by('-id')
+
+    return render(request, 'due_generation.html', {
+        'issues': issues
+    })
 # ================= CLEAR DUE =================
 
 def clear_due(request, issue_id):
