@@ -154,4 +154,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ================= RESEND SETTINGS =================
 
-RESEND_API_KEY = os.getenv("re_fM69zqMy_5Juyc2v6adWy3WqyfbqwJXC3")
+RESEND_API_KEY = os.getenv("RESEND_API_KEY")
