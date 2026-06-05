@@ -14,7 +14,7 @@ from django.core.mail import send_mail
 
 from django.conf import settings
 
-import resend
+
 
 from django.conf import settings
 
@@ -525,29 +525,22 @@ def approve_request(request, request_id):
         req.status = "Approved"
         req.save()
 
-        try:
-            resend.api_key = settings.RESEND_API_KEY
-
-            resend.Emails.send({
-                "from": "onboarding@resend.dev",
-                "to": [req.student.email],
-                "subject": "Book Request Approved",
-                "text": f"""
+        send_mail(
+    'Book Request Approved',
+    f'''
 Hello {req.student.username},
 
-Your requested book '{book.title}' has been approved.
+Your requested book "{book.title}" has been approved.
 
 Please collect the book from the library.
 
 Thank You,
 Smart Library
-"""
-            })
-
-        except Exception as e:
-            print("Resend Error:", e)
-
-    return redirect('student_book_requests')
+    ''',
+    settings.DEFAULT_FROM_EMAIL,
+    [req.student.email],
+    fail_silently=False
+)
 
        
 
@@ -700,14 +693,9 @@ def generate_due(request, issue_id):
 
     issue.save()
 
-    try:
-        resend.api_key = settings.RESEND_API_KEY
-
-        resend.Emails.send({
-            "from": "onboarding@resend.dev",
-            "to": [issue.student.email],
-            "subject": "Library Due Notice",
-            "text": f"""
+    send_mail(
+    'Library Due Notice',
+    f'''
 Hello {issue.student.username},
 
 A due has been generated for the book:
@@ -715,19 +703,17 @@ A due has been generated for the book:
 {issue.book.title}
 
 Return Date:
-{issue.due_return_date.strftime('%d-%m-%Y %I:%M %p')}
+{issue.due_return_date.strftime("%d-%m-%Y %I:%M %p")}
 
 Please return the book before the due date.
 
 Thank You,
 Smart Library
-"""
-        })
-
-    except Exception as e:
-        print("Resend Error:", e)
-
-    return redirect('due_generation')
+    ''',
+    settings.DEFAULT_FROM_EMAIL,
+    [issue.student.email],
+    fail_silently=False
+)
 
 def due_generation(request):
 
