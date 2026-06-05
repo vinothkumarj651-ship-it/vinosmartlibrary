@@ -524,10 +524,10 @@ def approve_request(request, request_id):
 
         req.status = "Approved"
         req.save()
-        
-send_mail(
-    'Book Request Approved',
-    f'''
+
+        send_mail(
+            'Book Request Approved',
+            f'''
 Hello {req.student.username},
 
 Your requested book "{book.title}" has been approved.
@@ -536,11 +536,13 @@ Please collect the book from the library.
 
 Thank You,
 Smart Library
-''',
-    settings.EMAIL_HOST_USER,
-    [req.student.email],
-    fail_silently=False
-)
+            ''',
+            settings.EMAIL_HOST_USER,
+            [req.student.email],
+            fail_silently=False
+        )
+
+    return redirect('student_book_requests')
 
        
 
@@ -572,7 +574,7 @@ Smart Library
         ''',
         settings.EMAIL_HOST_USER,
         [req.student.email],
-        fail_silently=True
+        fail_silently=False
     )
 
     return redirect('student_book_requests')
@@ -694,8 +696,8 @@ def generate_due(request, issue_id):
     issue.save()
 
     send_mail(
-    'Library Due Notice',
-    f'''
+        'Library Due Notice',
+        f'''
 Hello {issue.student.username},
 
 A due has been generated for the book:
@@ -709,11 +711,13 @@ Please return the book before the due date.
 
 Thank You,
 Smart Library
-    ''',
-    settings.DEFAULT_FROM_EMAIL,
-    [issue.student.email],
-    fail_silently=False
-)
+        ''',
+        settings.EMAIL_HOST_USER,
+        [issue.student.email],
+        fail_silently=False
+    )
+
+    return redirect('due_generation')
 
 def due_generation(request):
 
